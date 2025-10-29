@@ -28,7 +28,7 @@ export default function Hero() {
 
     const imageDetails = {
         web: {
-            src: "/profile-photo1.png",
+            src: "/profile1.png",
             alt: "Sehan Mindula - Web Developer",
             width: 600, 
             height: 600,
