@@ -50,7 +50,6 @@ export default function Education() {
         <div className="flex flex-col gap-10">
           {educationData.map((item, index) => (
             <EducationItemCard
-              key={item.id}
               item={item}
               index={index}
               mode={mode}
