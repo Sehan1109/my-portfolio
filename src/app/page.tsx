@@ -1,103 +1,385 @@
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+// --- 👇 [UPDATED] Icon Imports ---
+import {
+  FaLinkedin,
+  FaFacebook,
+  FaGithub,
+  FaReact,
+  FaNodeJs,
+  FaFigma,
+} from "react-icons/fa";
+import { IoLogoJavascript } from "react-icons/io5";
+import { SiAdobephotoshop, SiAdobeillustrator } from "react-icons/si";
 
-export default function Home() {
+// Define your image paths
+const defaultImage = "/profile.png";
+const webDevImage = "/profile1.png";
+const uiuxImage = "/white-pro.png";
+
+// --- Set a consistent animation duration ---
+const ANIMATION_DURATION_MS = 1500;
+const ANIMATION_DURATION_CLASS = "duration-[1500ms]";
+
+const imageCommonClasses = `
+  col-start-1 row-start-1
+  transition-opacity ${ANIMATION_DURATION_CLASS} ease-in-out
+  w-auto h-auto max-h-[100vh] max-w-[90vw] 
+  sm:max-w-md md:max-w-lg lg:max-w-xl 
+  object-contain pointer-events-auto
+`;
+
+// --- 👇 [NEW] Base classes for dropping icons ---
+const iconBaseClasses = `
+  text-4xl sm:text-5xl 
+  transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+`;
+
+const HomePage: React.FC = () => {
+  const router = useRouter();
+  const [hoveredSide, setHoveredSide] = useState<"none" | "webdev" | "uiux">(
+    "none"
+  );
+  const [animatingToPage, setAnimatingToPage] = useState<
+    "none" | "webdev" | "uiux"
+  >("none");
+
+  const handleNavigation = (side: "webdev" | "uiux") => {
+    if (animatingToPage !== "none") return;
+    setAnimatingToPage(side);
+    setHoveredSide("none"); // Stop hover animations
+
+    setTimeout(() => {
+      const path = side === "webdev" ? "/WebDevPage" : "/UiuxPage";
+      router.push(path);
+      setTimeout(() => setAnimatingToPage("none"), 100);
+    }, ANIMATION_DURATION_MS);
+  };
+
+  // Background logic
+  const webDevBgClass =
+    animatingToPage !== "none"
+      ? "bg-transparent"
+      : hoveredSide === "uiux"
+      ? "bg-slate-800"
+      : "bg-gray-300";
+
+  const uiuxBgClass =
+    animatingToPage !== "none"
+      ? "bg-transparent"
+      : hoveredSide === "webdev"
+      ? "bg-gray-300"
+      : "bg-slate-800";
+
+  // --- 👇 [NEW] Helper function for icon animation ---
+  const iconDropClass = (side: "webdev" | "uiux") => {
+    // Show if NOT clicking AND hover matches
+    const isVisible = animatingToPage === "none" && hoveredSide === side;
+    return isVisible
+      ? "translate-y-24 sm:translate-y-32 opacity-80" // Drop down into view
+      : "-translate-y-full opacity-0"; // Start above and hidden
+  };
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+    <div className="relative flex flex-col min-h-screen w-full">
+      {/* Top Bar (no changes) */}
+      <div
+        className="
+          w-full bg-white shadow-md z-30 
+          flex justify-between items-center 
+          px-8 py-4
+        "
+      >
+        <h1 className="text-2xl font-bold text-black">SEHAN MINDULA</h1>
+        <div className="flex items-center gap-6">
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href="https://linkedin.com/in/your-profile"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="LinkedIn"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+            <FaLinkedin className="text-2xl text-gray-700 hover:text-blue-600 transition-colors" />
           </a>
           <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href="https://facebook.com/your-profile"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Facebook"
           >
-            Read our docs
+            <FaFacebook className="text-2xl text-gray-700 hover:text-blue-800 transition-colors" />
+          </a>
+          <a
+            href="https://github.com/your-profile"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <FaGithub className="text-2xl text-gray-700 hover:text-black transition-colors" />
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+
+      {/* Wrapper for main content */}
+      <div className="relative flex flex-1 w-full overflow-hidden">
+        {/* Left Side (Web Developer) */}
+        <div
+          onClick={() => handleNavigation("webdev")}
+          onMouseEnter={() => {
+            if (animatingToPage === "none") setHoveredSide("webdev");
+          }}
+          onMouseLeave={() => {
+            if (animatingToPage === "none") setHoveredSide("none");
+          }}
+          className={`
+            flex-1 
+            ${webDevBgClass} 
+            text-black 
+            flex 
+            flex-col 
+            justify-center 
+            items-center 
+            text-center 
+            p-8 
+            sm:p-16 
+            cursor-pointer 
+            transition-colors 
+            ${ANIMATION_DURATION_CLASS} 
+            ease-in-out
+          `}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          {/* Wrapper for CLICK animation */}
+          <div
+            className={`
+              relative z-10
+              transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+              ${
+                animatingToPage === "webdev"
+                  ? "scale-110 translate-x-[25vw] opacity-100"
+                  : animatingToPage === "uiux"
+                  ? "scale-90 -translate-x-full opacity-0"
+                  : ""
+              }
+            `}
+          >
+            {/* --- 👇 [NEW] Dropping Icons --- */}
+            <div className="absolute inset-x-0 top-0 flex justify-center gap-6 sm:gap-10 pointer-events-none text-black">
+              <FaReact
+                className={`${iconBaseClasses} delay-[100ms] ${iconDropClass(
+                  "webdev"
+                )}`}
+              />
+              <FaNodeJs
+                className={`${iconBaseClasses} delay-[200ms] ${iconDropClass(
+                  "webdev"
+                )}`}
+              />
+              <IoLogoJavascript
+                className={`${iconBaseClasses} delay-[300ms] ${iconDropClass(
+                  "webdev"
+                )}`}
+              />
+            </div>
+            {/* --- [END] Dropping Icons --- */}
+
+            {/* H1 HOVER logic */}
+            <h1
+              className={`
+                text-4xl sm:text-9xl font-extrabold mb-4 text-center
+                transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+                ${
+                  animatingToPage === "none" && hoveredSide === "uiux"
+                    ? "opacity-0 scale-90"
+                    : ""
+                }
+              `}
+            >
+              Web
+            </h1>
+            {/* H1 HOVER logic */}
+            <h1
+              className={`
+                text-4xl sm:text-6xl font-extrabold mb-4 text-center
+                transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+                ${
+                  animatingToPage === "none" && hoveredSide === "webdev"
+                    ? "translate-x-[50vw] scale-110 opacity-100"
+                    : animatingToPage === "none" && hoveredSide === "uiux"
+                    ? "opacity-0 scale-90"
+                    : ""
+                }
+              `}
+            >
+              Developer
+            </h1>
+            {/* P HOVER logic */}
+            <p
+              className={`
+                text-xl sm:text-2xl text-center
+                transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+                ${
+                  animatingToPage === "none" && hoveredSide === "uiux"
+                    ? "opacity-0 scale-90"
+                    : ""
+                }
+              `}
+            >
+              Full stack developer
+            </p>
+          </div>
+        </div>
+
+        {/* Right Side (UI/UX Designer) */}
+        <div
+          onClick={() => handleNavigation("uiux")}
+          onMouseEnter={() => {
+            if (animatingToPage === "none") setHoveredSide("uiux");
+          }}
+          onMouseLeave={() => {
+            if (animatingToPage === "none") setHoveredSide("none");
+          }}
+          className={`
+            flex-1 
+            ${uiuxBgClass} 
+            text-white 
+            flex 
+            flex-col 
+            justify-center 
+            items-center 
+            text-center 
+            p-8 
+            sm:p-16 
+            cursor-pointer 
+            transition-colors 
+            ${ANIMATION_DURATION_CLASS} 
+            ease-in-out
+          `}
         >
+          {/* Wrapper for CLICK animation */}
+          <div
+            className={`
+              relative z-10
+              transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+              ${
+                animatingToPage === "uiux"
+                  ? "scale-110 -translate-x-[25vw] opacity-100"
+                  : animatingToPage === "webdev"
+                  ? "scale-90 translate-x-full opacity-0"
+                  : ""
+              }
+            `}
+          >
+            {/* --- 👇 [NEW] Dropping Icons --- */}
+            <div className="absolute inset-x-0 top-0 flex justify-center gap-6 sm:gap-10 pointer-events-none text-white">
+              <FaFigma
+                className={`${iconBaseClasses} delay-[100ms] ${iconDropClass(
+                  "uiux"
+                )}`}
+              />
+              <SiAdobeillustrator
+                className={`${iconBaseClasses} delay-[200ms] ${iconDropClass(
+                  "uiux"
+                )}`}
+              />
+              <SiAdobephotoshop
+                className={`${iconBaseClasses} delay-[300ms] ${iconDropClass(
+                  "uiux"
+                )}`}
+              />
+            </div>
+            {/* --- [END] Dropping Icons --- */}
+
+            {/* H1 HOVER logic */}
+            <h1
+              className={`
+                text-4xl sm:text-9xl font-extrabold mb-4 text-center
+                transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+                ${
+                  animatingToPage === "none" && hoveredSide === "webdev"
+                    ? "opacity-0 scale-90"
+                    : ""
+                }
+              `}
+            >
+              UI/UX
+            </h1>
+            {/* H1 HOVER logic */}
+            <h1
+              className={`
+                text-4xl sm:text-6xl font-extrabold mb-4 text-center
+                transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+                ${
+                  animatingToPage === "none" && hoveredSide === "uiux"
+                    ? "-translate-x-[50vw] scale-110 opacity-100"
+                    : animatingToPage === "none" && hoveredSide === "webdev"
+                    ? "opacity-0 scale-90"
+                    : ""
+                }
+              `}
+            >
+              Designer
+            </h1>
+            {/* P HOVER logic */}
+            <p
+              className={`
+                text-xl sm:text-2xl italic text-center
+                transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
+                ${
+                  animatingToPage === "none" && hoveredSide === "webdev"
+                    ? "opacity-0 scale-90"
+                    : ""
+                }
+              `}
+            >
+              Special for UI/UX design
+            </p>
+          </div>
+        </div>
+
+        {/* Central Image Overlay */}
+        <div className="absolute inset-0 grid grid-cols-1 grid-rows-1 justify-items-center items-center pointer-events-none z-20">
           <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+            src={defaultImage}
+            alt="SE"
+            width={400}
+            height={600}
+            className={`${imageCommonClasses} ${
+              hoveredSide === "none" && animatingToPage === "none"
+                ? "opacity-100"
+                : "opacity-0"
+            }`}
+            priority
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
           <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+            src={webDevImage}
+            alt="SE"
+            width={400}
+            height={600}
+            className={`${imageCommonClasses} ${
+              hoveredSide === "webdev" && animatingToPage === "none"
+                ? "opacity-100"
+                : "opacity-0"
+            }`}
+            priority
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <Image
+            src={uiuxImage}
+            alt="SE"
+            width={400}
+            height={600}
+            className={`${imageCommonClasses} ${
+              hoveredSide === "uiux" && animatingToPage === "none"
+                ? "opacity-100"
+                : "opacity-0"
+            }`}
+            priority
+          />
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default HomePage;

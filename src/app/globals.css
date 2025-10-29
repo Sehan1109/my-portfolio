@@ -1,26 +1,107 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer base {
+  /* Import the Inter font (you can also use next/font) */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Custom component for section titles */
+  .section-title {
+    @apply text-3xl font-bold md:text-4xl mb-8 relative;
+    /* Futuristic underline effect */
+    @apply after:content-[''] after:absolute after:left-0 after:-bottom-2 after:h-[3px] after:w-16 after:bg-accent;
+  }
+
+  /* Custom scrollbar for a more modern feel (optional) */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0D1117;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #30363D;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #58A6FF;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* --- 1. Click Bubbles Effect (Updated) --- */
+.bubble {
+  position: fixed;
+  z-index: 9999;
+  border: 2px solid #0ea5e9;
+  border-radius: 50%;
+
+  /* 'width' and 'height' are now set inline by React */
+
+  /* Start centered and at 0 size */
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 1;
+
+  /* 'animation-duration' is set inline.
+    We just define the name, timing, and fill mode here.
+  */
+  animation-name: bubble-pop;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  /* Keeps it at the '100%' state */
+
+  pointer-events: none;
+
+  /* Define default values for our custom properties */
+  --translateX: 0px;
+  --translateY: -30px;
+}
+
+@keyframes bubble-pop {
+  /* 0% state is defined in the .bubble class (scale(0), opacity 1) */
+
+  100% {
+    /* Animate to full size, fade out, and move */
+    transform: translate(-50%, -50%) scale(1.1)
+      /* Pop slightly larger than final size */
+      translate(var(--translateX), var(--translateY));
+    opacity: 0;
+  }
+}
+
+/* --- 2. Comet Trail Effect --- */
+.comet-particle {
+  position: fixed;
+  z-index: 9998;
+  width: 10px;
+  height: 10px;
+  background-color: #0ea5e9;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #0ea5e9, 0 0 12px #0ea5e9;
+  transform: translate(-50%, -50%);
+  animation: comet-fade 0.75s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes comet-fade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
 }
