@@ -173,7 +173,7 @@ export default function Projects() {
               key={project.id}
               project={project}
               mode={mode}
-              onCardClick={setSelectedProject}
+              onCardClick={(proj) => setSelectedProject(proj as Project | null)}
             />
           ))}
 

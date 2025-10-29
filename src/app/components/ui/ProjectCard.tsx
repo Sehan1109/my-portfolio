@@ -7,7 +7,7 @@ import { Project } from "@/types";
 type Props = {
   project: Project;
   mode: "web" | "uiux";
-  onCardClick: (project: Project) => void; 
+  onCardClick: (project: Project | null) => void; 
 };
 
 // ✅ Cast variants as Variants to satisfy TypeScript
