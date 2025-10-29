@@ -2,15 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Project } from "@/types";
+// Define the Project type here since '@/types' cannot be found
+type Project = {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  repoUrl: string;
+  liveUrl?: string;
+};
 import ProjectCard from "./ui/ProjectCard";
 import { usePathname } from "next/navigation";
 import ProjectModal from "./ui/ProjectModal";
-
-const sectionAnimation = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
 
 const INITIAL_PROJECT_COUNT = 6;
 
@@ -20,10 +24,11 @@ const uiuxProjects: Project[] = [
     title: "News App Design",
     description:
       "A complete UI/UX overhaul for a mobile news app, focusing on user flow and conversion.",
-    image: "/project/FOTnews.png", // 👈 Add your project images
+    image: "/project/FOTnews.png",
     tags: ["Figma", "UI Design", "Mobile", "User Research"],
-    repoUrl: "https://drive.google.com/file/d/1qsr8_b5iaR4xxctE3gZW8l6GEPLBuX2u/view?usp=sharing",
-  }
+    repoUrl:
+      "https://drive.google.com/file/d/1qsr8_b5iaR4xxctE3gZW8l6GEPLBuX2u/view?usp=sharing",
+  },
 ];
 
 const uiuxTags = [
@@ -39,12 +44,7 @@ const uiuxTags = [
   "Prototyping",
 ];
 
-const excluededRepos = [
-  "my-first-repo",
-  "testcode",
-  "code-creation",
-  "TodoList"
-];
+const excluededRepos = ["my-first-repo", "testcode", "code-creation", "TodoList"];
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -66,8 +66,7 @@ export default function Projects() {
 
           const repos = await res.json();
           const relevantRepos = repos.filter(
-            (repo: any) =>
-              !repo.fork && !excluededRepos.includes(repo.name)
+            (repo: any) => !repo.fork && !excluededRepos.includes(repo.name)
           );
 
           const data: Project[] = relevantRepos.map((repo: any) => ({
@@ -125,9 +124,9 @@ export default function Projects() {
     <motion.section
       id="projects"
       className="w-full py-16 md:py-24"
-      variants={sectionAnimation}
-      initial="hidden"
-      whileInView="visible"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.1 }}
     >
       <h2
@@ -163,17 +162,27 @@ export default function Projects() {
         ))}
       </div>
 
+      {/* Project Cards */}
       <motion.div
         layout
-        className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 "
+        className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
       >
         <AnimatePresence>
           {projectsToDisplay.map((project) => (
-            <ProjectCard key={project.id} project={project} mode={mode} onCardClick={setSelectedProject}/>
+            <ProjectCard
+              key={project.id}
+              project={project}
+              mode={mode}
+              onCardClick={setSelectedProject}
+            />
           ))}
 
           {/* Popup modal */}
-          <ProjectModal project={selectedProject} onClose={() =>setSelectedProject(null)} mode={mode}/>
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+            mode={mode}
+          />
         </AnimatePresence>
       </motion.div>
 

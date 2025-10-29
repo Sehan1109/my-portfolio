@@ -72,9 +72,9 @@ const ClickBubbles: React.FC = () => {
             height: `${bubble.size}px`,
             animationDuration: `${bubble.duration}s`,
             // Pass random values to CSS as custom properties
-            '--translateX': `${bubble.translateX}px`,
-            '--translateY': `${bubble.translateY}px`,
-          }}
+            ['--translateX' as string]: `${bubble.translateX}px`,
+            ['--translateY' as string]: `${bubble.translateY}px`,
+          } as React.CSSProperties}
         />
       ))}
     </>

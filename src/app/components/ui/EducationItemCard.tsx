@@ -1,31 +1,27 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { FaGraduationCap } from "react-icons/fa";
-import { EducationItem } from "@/types"; // Assuming this is your type
+import { EducationItem } from "@/types";
 
-// 1. Update Props to accept 'mode'
 type Props = {
   item: EducationItem;
-  index: number; // For staggered animation
-  mode: "web" | "uiux"; // Accept the mode from the parent
+  index: number;
+  mode: "web" | "uiux";
 };
 
-// Animation for each item
-const itemAnimation = {
+// ✅ Properly typed variants using custom
+const itemAnimation: Variants = {
   hidden: { opacity: 0, x: -50 },
-  visible: (index: number) => ({
+  visible: (custom: number) => ({
     opacity: 1,
     x: 0,
     transition: {
-      delay: index * 0.1, // Staggered delay
+      delay: custom * 0.1,
       duration: 0.4,
-      ease: "easeOut",
+      ease: [0.25, 0.46, 0.45, 0.94], // use easing array instead of string
     },
   }),
 };
 
-// 2. Update function signature to receive 'mode'
 export default function EducationItemCard({ item, index, mode }: Props) {
   return (
     <motion.div
@@ -34,27 +30,22 @@ export default function EducationItemCard({ item, index, mode }: Props) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      custom={index}
+      custom={index} // passes index to the variant function
     >
-      {/* 3. Icon: Aligns with the timeline bar (Conditionally styled) */}
       <div
         className={`z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full shadow-md ${
-          mode === "uiux" ? "bg-gray-800" : "bg-white" // Using bg-white instead of bg-surface
+          mode === "uiux" ? "bg-gray-800" : "bg-white"
         }`}
       >
-        {/* 4. Icon color (Conditionally styled) */}
         <FaGraduationCap
           className={`text-xl ${
-            mode === "uiux" ? "text-uiux-accent" : "text-accent" // Use accent colors
+            mode === "uiux" ? "text-uiux-accent" : "text-accent"
           }`}
         />
       </div>
 
-      {/* Content */}
       <div className="flex-grow pt-1">
-        {/* Header: University + Date */}
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          {/* 5. University text color (Conditionally styled) */}
           <h3
             className={`text-lg font-semibold ${
               mode === "uiux" ? "text-white" : "text-gray-700"
@@ -62,7 +53,6 @@ export default function EducationItemCard({ item, index, mode }: Props) {
           >
             {item.university}
           </h3>
-          {/* 6. Date text color (Conditionally styled) */}
           <span
             className={`flex-shrink-0 text-sm sm:ml-4 ${
               mode === "uiux" ? "text-gray-400" : "text-gray-700"
@@ -71,13 +61,7 @@ export default function EducationItemCard({ item, index, mode }: Props) {
             {item.dateRange}
           </span>
         </div>
-
-        {/* 7. Description text color (Conditionally styled) */}
-        <p
-          className={`mt-1 text-sm ${
-            mode === "uiux" ? "text-gray-300" : "text-secondary"
-          }`}
-        >
+        <p className={`mt-1 text-sm ${mode === "uiux" ? "text-gray-300" : "text-secondary"}`}>
           {item.degree}
         </p>
       </div>

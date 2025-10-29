@@ -9,7 +9,6 @@ import {
   useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
-import { FaBars, FaTimes } from "react-icons/fa";
 
 // Define the navigation links
 const navLinks = [
@@ -33,10 +32,10 @@ export default function Navbar() {
 
   // This hook detects scroll direction to hide/show the navbar
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious();
+    const previous = scrollY.getPrevious() ?? 0; // Fallback to 0
     if (latest > previous && latest > 150) {
       setHidden(true);
-      setIsOpen(false); // Close mobile menu on scroll
+      setIsOpen(false);
     } else {
       setHidden(false);
     }

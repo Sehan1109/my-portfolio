@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useMotionValue, useSpring, animate } from "framer-motion";
+import { motion, useMotionValue, useSpring, animate, Variants } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation"; 
 import {
@@ -27,31 +27,30 @@ import {
 } from "react-icons/si";
 
 // ----------------------------------------------------------------------
-// 1. ANIMATION VARIANTS
+// 1. ANIMATION VARIANTS (fixed easing types)
 // ----------------------------------------------------------------------
 
-const sectionAnimation = {
+const sectionAnimation: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
+    transition: { duration: 0.5, ease: [0.42, 0, 0.58, 1] }, // ✅ type-safe cubic-bezier easeInOut
   },
 };
 
-const iconSpokeVariants = {
+const iconSpokeVariants: Variants = {
   hidden: { opacity: 0, scale: 0.5 },
-  visible: (i: number) => ({ // 'i' is the custom index
+  visible: (i: number) => ({
     opacity: 1,
     scale: 1,
     transition: {
       duration: 0.3,
-      ease: "easeOut",
-      delay: i * 0.1
-    }
+      ease: [0.42, 0, 0.58, 1], // ✅ same fix here
+      delay: i * 0.1,
+    },
   }),
 };
-
 
 // ----------------------------------------------------------------------
 // 2. DYNAMIC DATA
@@ -113,37 +112,34 @@ const techColors: { [key: string]: string } = {
 const descriptions = {
   web: {
     p1: "Hi, I'm Sehan Mindula. A Full-Stack Developer and third year student at the University of Colombo, studying Bachelor of Information and Communication Technology Honours.",
-    p2: "I am passionate about building efficient, scalable, and responsive web applications. I specialize in JavaScript,TypeScript and React/Node.js, and I thrive on turning complex problems into clean, functional code.",
+    p2: "I am passionate about building efficient, scalable, and responsive web applications. I specialize in JavaScript, TypeScript, and React/Node.js, and I thrive on turning complex problems into clean, functional code.",
   },
   uiux: {
     p1: "Hi, I'm Sehan Mindula. A UI/UX designer and third year student at the University of Colombo, specializing in Bachelor of Information and Communication Technology Honours.",
     p2: "I'm passionate about creating clean, user-centered designs that solve real problems. I thrive on turning complex ideas into intuitive and enjoyable digital experiences.",
   }
-}
+};
 
 // ----------------------------------------------------------------------
 // 3. COMPONENT LOGIC
 // ----------------------------------------------------------------------
 
-// 👇 *FIX IS HERE*: This function body is now restored.
 function getSphericalPosition(index: number, total: number) {
   const offset = 2 / total;
   const increment = Math.PI * (3 - Math.sqrt(5)); // golden angle
 
-  const y = ((index * offset) - 1) + offset / 2; // center around 0
-  const r = Math.sqrt(1 - y * y); // radius at this latitude
+  const y = ((index * offset) - 1) + offset / 2;
+  const r = Math.sqrt(1 - y * y);
   const phi = index * increment;
 
   const x = Math.cos(phi) * r;
   const z = Math.sin(phi) * r;
 
-  // Convert to degrees for rotationX and rotationY
   const angleX = Math.asin(y) * (180 / Math.PI);
   const angleY = Math.atan2(z, x) * (180 / Math.PI);
 
   return { angleX, angleY };
 }
-
 
 export default function About() {
   const pathname = usePathname();
@@ -176,7 +172,7 @@ export default function About() {
       yControlRef.current = animate(rotateY, targetY, {
         ease: "linear",
         duration: BASE_ORBIT_DURATION,
-        onComplete: animateRotation, // keep spinning
+        onComplete: animateRotation,
       });
 
       zControlRef.current = animate(rotateZ, targetZ, {
@@ -202,15 +198,18 @@ export default function About() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
     >
-      <h2 className={`section-title text-center ${
-        mode === 'uiux' ? 'text-white after:bg-uiux-accent' : 'text-black after:bg-accent'
-      }`}>About Me</h2>
+      <h2
+        className={`section-title text-center ${
+          mode === 'uiux' ? 'text-white after:bg-uiux-accent' : 'text-black after:bg-accent'
+        }`}
+      >
+        About Me
+      </h2>
 
       <div className="mt-12 flex flex-col md:flex-row items-center md:items-center gap-12">
-
-        {/* Left Side: Tech Icon Orbit (Sphere) */}
+        {/* Left Side: Tech Icon Orbit */}
         <div
-          className="w-full md:w-1f2 lg:w-1/3 flex items-center justify-center min-h-[350px] p-8 relative"
+          className="w-full md:w-1/2 lg:w-1/3 flex items-center justify-center min-h-[350px] p-8 relative"
           style={{ perspective: `${perspectiveInPx}px` }}
         >
           <motion.div
@@ -222,7 +221,6 @@ export default function About() {
             }}
           >
             {techIcons.map((tech, index) => {
-              // This line will now work correctly
               const { angleX, angleY } = getSphericalPosition(index, techIcons.length);
               const colorClass = techColors[tech.name] || (mode === 'uiux' ? 'text-white' : 'text-black');
 
@@ -246,32 +244,25 @@ export default function About() {
                     style={{ transformStyle: "preserve-3d", translateZ: `${radiusInPx}px` }}
                     title={tech.name}
                   >
-                    <span className={`hover:scale-110 ${colorClass}`}>
-                      {tech.icon}
-                    </span>
+                    <span className={`hover:scale-110 ${colorClass}`}>{tech.icon}</span>
                   </motion.div>
                 </motion.div>
               );
             })}
           </motion.div>
-          <div className={`absolute -top-100 -left-100 -z-10 h-64 w-32 rounded-full ${
-             mode === 'uiux' ? 'bg-uiux-accent/30' : 'bg-accent/30'
-          } blur-2xl md:h-48 md:w-48`}></div>
+          <div
+            className={`absolute -top-100 -left-100 -z-10 h-64 w-32 rounded-full ${
+              mode === 'uiux' ? 'bg-uiux-accent/30' : 'bg-accent/30'
+            } blur-2xl md:h-48 md:w-48`}
+          ></div>
         </div>
 
         {/* Right Side: Text Content */}
         <div className="w-full text-center md:w-1/2 lg:w-2/3 md:text-left flex flex-col justify-center">
-          <p className={`mb-4 text-lg ${mode === 'uiux' ? 'text-gray-300' : 'text-gray-700'}`}>
-            {content.p1}
-          </p>
-          <p className={`mb-4 text-lg ${mode === 'uiux' ? 'text-gray-300' : 'text-gray-700'}`}>
-            {content.p2}
-          </p>
-          <p className={`text-lg ${mode === 'uiux' ? 'text-gray-300' : 'text-gray-700'}`}>
-            {content.p3}
-          </p>
+          <p className={`mb-4 text-lg ${mode === 'uiux' ? 'text-gray-300' : 'text-gray-700'}`}>{content.p1}</p>
+          <p className={`mb-4 text-lg ${mode === 'uiux' ? 'text-gray-300' : 'text-gray-700'}`}>{content.p2}</p>
         </div>
       </div>
     </motion.section>
-  )
+  );
 }

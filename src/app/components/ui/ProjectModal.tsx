@@ -65,9 +65,9 @@ export default function ProjectModal({ project, onClose, mode }: Props) {
                     </p>
 
                     {/* Tags */}
-                    {project.tags?.length > 0 && (
+                    {(project.tags ?? []).length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-4">
-                            {project.tags.map((tag) => (
+                            {(project.tags ?? []).map((tag) => (
                                 <span
                                     key={tag}
                                     className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300"
@@ -77,6 +77,7 @@ export default function ProjectModal({ project, onClose, mode }: Props) {
                             ))}
                         </div>
                     )}
+
 
                     <div className="flex flex-wrap gap-3 mt-4">
                         {project.repoUrl && (

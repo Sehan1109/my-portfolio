@@ -74,16 +74,29 @@ export default function Hero() {
                 variants={itemVariants}
             >
                 <h1 className={`mb-4 text-4xl font-black sm:text-5xl md:text-6xl whitespace-nowrap ${mode === 'uiux' ? 'text-white' : 'text-black'}`}>
+                    {/* --- THIS IS THE FIX --- */}
                     <Typewriter
+                        onInit={(typewriter) => {
+                            const stringsToShow = mode === 'uiux' ? typewriterStrings.uiux : typewriterStrings.web;
+                            
+                            typewriter
+                                .typeString(stringsToShow[0])
+                                .pauseFor(2000) // Pause after the first string
+                                .deleteAll()
+                                .typeString(stringsToShow[1])
+                                .pauseFor(2000) // Pause after the second string
+                                .deleteAll()
+                                .start();
+                        }}
                         options={{
-                            strings: mode === 'uiux' ? typewriterStrings.uiux : typewriterStrings.web,
+                            // 'strings' and 'pauseFor' are removed from here
                             autoStart: true,
                             loop: true,
                             delay: 75,
                             deleteSpeed: 50,
-                            pauseFor: 2000,
                         }}
                     />
+                    {/* --- END OF FIX --- */}
                 </h1>
                 <p className={`mb-8 text-lg md:text-lg ${mode === 'uiux' ? 'text-gray-300 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.2)]' : 'text-gray-700'}`}>
                     {mode === 'uiux' ? descriptions.uiux : descriptions.web}

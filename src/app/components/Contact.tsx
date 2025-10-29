@@ -6,11 +6,6 @@ import { FaPaperPlane } from "react-icons/fa";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 
-const sectionAnimation = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
-
 export default function Contact() {
   const pathname = usePathname();
   const mode = pathname.startsWith("/UiuxPage") ? "uiux" : "web";
@@ -43,27 +38,21 @@ export default function Contact() {
     }
   };
 
-  // --- Tailwind 3D Background Classes ---
-  // We define these here to keep the JSX cleaner.
-  // Note: Tailwind needs underscores for spaces in arbitrary values.
-
   return (
     <motion.section
       id="contact"
-      className="relative w-full overflow-hidden py-16 md:py-24 [perspective:1000px]" // Added 3D perspective
-      variants={sectionAnimation}
-      initial="hidden"
-      whileInView="visible"
+      className="relative w-full overflow-hidden py-16 md:py-24 [perspective:1000px]"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.2 }}
     >
-      {/* 3D background elements */}
-      <div
-        className={`absolute inset-0 z-0 pointer-events-none`}
-      ></div>
+      {/* 3D background */}
+      <div className="absolute inset-0 z-0 pointer-events-none"></div>
 
-      <div className="relative z-10 mx-auto max-w-2xl text-center"> {/* Added relative z-10 */}
+      <div className="relative z-10 mx-auto max-w-2xl text-center">
         <h2
-          className={`section-title relative z-10 mx-auto inline-block ${ // Added relative z-10
+          className={`section-title relative z-10 mx-auto inline-block ${
             mode === "uiux"
               ? "text-white after:bg-uiux-accent"
               : "text-black after:bg-accent"
@@ -72,7 +61,7 @@ export default function Contact() {
           Get In Touch
         </h2>
         <p
-          className={`relative z-10 mt-4 text-lg ${ // Added relative z-10
+          className={`relative z-10 mt-4 text-lg ${
             mode === "uiux" ? "text-gray-300" : "text-gray-700"
           }`}
         >
@@ -90,7 +79,7 @@ export default function Contact() {
           [transform:rotateX(5deg)_rotateY(-5deg)_translateZ(20px)]
           transition-transform duration-300 ease-in-out
           hover:[transform:rotateX(2deg)_rotateY(-2deg)_translateZ(30px)]
-        `} // --- 3D form container classes ---
+        `}
       >
         <div>
           <label
