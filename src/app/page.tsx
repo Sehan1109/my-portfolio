@@ -24,13 +24,20 @@ const uiuxImage = "/white-pro.png";
 const ANIMATION_DURATION_MS = 1500;
 const ANIMATION_DURATION_CLASS = "duration-[1500ms]";
 
+// --- 👇 [UPDATED] Image Sizing ---
 const imageCommonClasses = `
   col-start-1 row-start-1
   transition-opacity ${ANIMATION_DURATION_CLASS} ease-in-out
-  w-auto h-auto max-h-[100vh] max-w-[90vw] 
-  sm:max-w-md md:max-w-lg lg:max-w-xl 
+  w-auto h-auto max-h-[100vh] 
+  max-w-32 /* 14rem / 224px */
+  sm:max-w-xs /* 20rem / 320px */
+  md:max-w-xs /* 20rem / 320px */
+  lg:max-w-sm /* 24rem / 384px */
+  xl:max-w-md /* 28rem / 448px */
+
   object-contain pointer-events-auto
 `;
+// --- [END] Image Sizing ---
 
 // --- 👇 [NEW] Base classes for dropping icons ---
 const iconBaseClasses = `

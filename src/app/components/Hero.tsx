@@ -30,16 +30,18 @@ export default function Hero() {
         web: {
             src: "/profile1.png",
             alt: "Sehan Mindula - Web Developer",
-            width: 600, 
+            width: 600,
             height: 600,
-            sizingDivClassName: "w-[300px] md:w-[400px] lg:w-[320px] rounded-3xl shadow-[20px_20px_50px_rgba(0,0,0,0.1),-20px_-20px_50px_rgba(255,255,255,0.2)]"
+            // --- 👇 [UPDATED] Logical responsive sizing ---
+            sizingDivClassName: "w-64 sm:w-72 md:w-80 lg:w-96 rounded-3xl shadow-[20px_20px_50px_rgba(0,0,0,0.1),-20px_-20px_50px_rgba(255,255,255,0.2)]"
         },
         uiux: {
             src: "/white-pro.png",
             alt: "Sehan Mindula - UI/UX Designer",
             width: 600,
-            height: 600, 
-            sizingDivClassName: "w-[300px] md:w-[400px] lg:w-[320px] rounded-3xl shadow-[20px_20px_50px_rgba(0,0,0,0.4),-20px_-20px_50px_rgba(255,255,255,0.1)]"
+            height: 600,
+            // --- 👇 [UPDATED] Logical responsive sizing ---
+            sizingDivClassName: "w-64 sm:w-72 md:w-80 lg:w-96 rounded-3xl shadow-[20px_20px_50px_rgba(0,0,0,0.4),-20px_-20px_50px_rgba(255,255,255,0.1)]"
         }
     };
 
@@ -61,7 +63,8 @@ export default function Hero() {
     return (
         <motion.section
             id="hero"
-            className={`flex min-h-screen w-full flex-col items-center justify-center pt-20 md:flex-row md:justify-between md:pt-0 ${
+            // --- 👇 [UPDATED] Added horizontal padding (px-...) and mobile gap ---
+            className={`flex min-h-screen w-full flex-col items-center justify-center gap-12 px-6 pt-20 sm:px-12 md:flex-row md:justify-between md:gap-0 md:px-16 md:pt-0 lg:px-24 ${
                 mode === 'uiux' ? 'bg-slate-800' : 'bg-gray-300'
             }`}
             variants={containerVariants}
@@ -70,11 +73,12 @@ export default function Hero() {
         >
             {/* --- Text Content --- */}
             <motion.div
-                className="mb-8 max-w-2xl text-center md:mb-0 md:text-left"
+                // --- 👇 [UPDATED] Removed mb-8, parent flex now handles gap ---
+                className="max-w-2xl text-center md:text-left"
                 variants={itemVariants}
             >
-                <h1 className={`mb-4 text-4xl font-black sm:text-5xl md:text-6xl whitespace-nowrap ${mode === 'uiux' ? 'text-white' : 'text-black'}`}>
-                    {/* --- THIS IS THE FIX --- */}
+                {/* --- 👇 [UPDATED] Responsive font size and removed whitespace-nowrap --- */}
+                <h1 className={`mb-4 text-3xl font-black sm:text-4xl md:text-5xl lg:text-6xl ${mode === 'uiux' ? 'text-white' : 'text-black'}`}>
                     <Typewriter
                         onInit={(typewriter) => {
                             const stringsToShow = mode === 'uiux' ? typewriterStrings.uiux : typewriterStrings.web;
@@ -89,18 +93,19 @@ export default function Hero() {
                                 .start();
                         }}
                         options={{
-                            // 'strings' and 'pauseFor' are removed from here
                             autoStart: true,
                             loop: true,
                             delay: 75,
                             deleteSpeed: 50,
                         }}
                     />
-                    {/* --- END OF FIX --- */}
                 </h1>
-                <p className={`mb-8 text-lg md:text-lg ${mode === 'uiux' ? 'text-gray-300 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.2)]' : 'text-gray-700'}`}>
+                {/* --- 👇 [UPDATED] Responsive font size (text-base on mobile) --- */}
+                <p className={`mb-8 text-base md:text-lg ${mode === 'uiux' ? 'text-gray-300 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.2)]' : 'text-gray-700'}`}>
                     {mode === 'uiux' ? descriptions.uiux : descriptions.web}
                 </p>
+                
+                {/* --- [UNCHANGED] Buttons --- */}
                 <div className="flex justify-center gap-4 md:justify-start">
                     <motion.a
                         href="#projects"
@@ -119,6 +124,7 @@ export default function Hero() {
                         Get in Touch
                     </motion.a>
                 </div>
+                {/* --- [UNCHANGED] Socials --- */}
                 <div className="mt-8 flex justify-center gap-6 md:justify-start">
                     <a
                         href="https://github.com/Sehan1109"
@@ -143,6 +149,7 @@ export default function Hero() {
 
             {/* --- Image Content with 3D Look --- */}
             <motion.div className="relative" variants={itemVariants}>
+                {/* --- 👇 [UPDATED] ClassName is now responsive --- */}
                 <div className={imageDetails[mode].sizingDivClassName}>
                     <Image
                         src={imageDetails[mode].src}
@@ -155,7 +162,7 @@ export default function Hero() {
                     />
                 </div>
 
-                {/* Floating blur/glow circles for depth */}
+                {/* --- [UNCHANGED] Floating blur/glow circles --- */}
                 <div className={`absolute -top-6 -right-1 -z-10 h-60 w-32 rounded-full ${mode === 'uiux' ? 'bg-uiux-accent/30' : 'bg-accent/30'} blur-3xl md:h-48 md:w-48`}></div>
                 <div className={`absolute -bottom-4 -left-4 -z-10 h-64 w-32 rounded-full ${mode === 'uiux' ? 'bg-uiux-accent/30' : 'bg-accent/30'} blur-3xl md:h-48 md:w-48`}></div>
             </motion.div>
