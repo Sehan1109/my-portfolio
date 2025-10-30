@@ -41,7 +41,7 @@ const imageCommonClasses = `
 
 // --- 👇 [NEW] Base classes for dropping icons ---
 const iconBaseClasses = `
-  text-4xl sm:text-5xl 
+  text-3xl sm:text-5xl 
   transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
 `;
 
