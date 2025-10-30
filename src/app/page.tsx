@@ -41,7 +41,7 @@ const imageCommonClasses = `
 
 // --- 👇 [NEW] Base classes for dropping icons ---
 const iconBaseClasses = `
-  text-3xl sm:text-5xl 
+  text-4xl sm:text-5xl 
   transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
 `;
 
@@ -100,7 +100,7 @@ const HomePage: React.FC = () => {
           px-8 py-4
         "
       >
-        <h1 className="text-2xl font-bold text-black">SEHAN MINDULA</h1>
+        <h1 className="text-xl font-bold text-black">SEHAN MINDULA</h1>
         <div className="flex items-center gap-6">
           <a
             href="https://linkedin.com/in/your-profile"
@@ -130,7 +130,8 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Wrapper for main content */}
-      <div className="relative flex flex-1 w-full overflow-hidden">
+      {/* --- 👇 [UPDATED] Stacks vertically on mobile, row on desktop --- */}
+      <div className="relative flex flex-col sm:flex-row flex-1 w-full overflow-hidden">
         {/* Left Side (Web Developer) */}
         <div
           onClick={() => handleNavigation("webdev")}
@@ -146,27 +147,31 @@ const HomePage: React.FC = () => {
             text-black 
             flex 
             flex-col 
-            justify-center 
             items-center 
             text-center 
-            p-8 
+            px-8 pt-8 pb-20
             sm:p-16 
             cursor-pointer 
             transition-colors 
             ${ANIMATION_DURATION_CLASS} 
             ease-in-out
+            {/* --- 👇 [UPDATED] Aligns text to BOTTOM on mobile --- */}
+            justify-end sm:justify-center
           `}
         >
           {/* Wrapper for CLICK animation */}
+          {/* --- 👇 [UPDATED] Mobile (translate-y) and Desktop (translate-x) animations --- */}
           <div
             className={`
               relative z-10
               transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
               ${
                 animatingToPage === "webdev"
-                  ? "scale-110 translate-x-[25vw] opacity-100"
+                  // MOBILE: Move down to center
+                  ? "scale-110 translate-y-[25vh] opacity-100 sm:translate-y-0 sm:translate-x-[25vw]"
                   : animatingToPage === "uiux"
-                  ? "scale-90 -translate-x-full opacity-0"
+                  // MOBILE: Move up and out
+                  ? "scale-90 -translate-y-full opacity-0 sm:translate-y-0 sm:-translate-x-full"
                   : ""
               }
             `}
@@ -253,27 +258,31 @@ const HomePage: React.FC = () => {
             text-white 
             flex 
             flex-col 
-            justify-center 
             items-center 
             text-center 
-            p-8 
+            px-8 pb-0.1 pt-28
             sm:p-16 
             cursor-pointer 
             transition-colors 
             ${ANIMATION_DURATION_CLASS} 
             ease-in-out
+            {/* --- 👇 [UPDATED] Aligns text to TOP on mobile --- */}
+            justify-start sm:justify-center
           `}
         >
           {/* Wrapper for CLICK animation */}
+          {/* --- 👇 [UPDATED] Mobile (translate-y) and Desktop (translate-x) animations --- */}
           <div
             className={`
               relative z-10
               transition-all ${ANIMATION_DURATION_CLASS} ease-in-out
               ${
                 animatingToPage === "uiux"
-                  ? "scale-110 -translate-x-[25vw] opacity-100"
+                  // MOBILE: Move up to center
+                  ? "scale-110 -translate-y-[25vh] opacity-100 sm:translate-y-0 sm:-translate-x-[25vw]"
                   : animatingToPage === "webdev"
-                  ? "scale-90 translate-x-full opacity-0"
+                  // MOBILE: Move down and out
+                  ? "scale-90 translate-y-full opacity-0 sm:translate-y-0 sm:translate-x-full"
                   : ""
               }
             `}
